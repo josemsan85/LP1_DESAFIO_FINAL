@@ -238,8 +238,18 @@ public class VentanaPrincipal extends JFrame {
         });
 
         JPanel norte = new JPanel(new BorderLayout());
+        JButton btnVerRecetas = new JButton("Ver recetas del paciente");
+        JPanel panelBotonesAtencion = new JPanel(new GridLayout(1, 2, 5, 5));
+        panelBotonesAtencion.add(btnRegistrarAtencion);
+        panelBotonesAtencion.add(btnVerRecetas);
         norte.add(formAtencion, BorderLayout.NORTH);
-        norte.add(btnRegistrarAtencion, BorderLayout.SOUTH);
+        norte.add(panelBotonesAtencion, BorderLayout.SOUTH);
+
+        // Evento: abre una mini ventana con las recetas del paciente seleccionado
+        btnVerRecetas.addActionListener(e -> {
+            Paciente paciente = (Paciente) comboPacienteAtencion.getSelectedItem();
+            mostrarRecetasPaciente(paciente);
+        });
 
         // --- Formulario de receta (usa la atencion seleccionada) ---
         JPanel formReceta = new JPanel(new BorderLayout(5, 5));
@@ -362,6 +372,41 @@ public class VentanaPrincipal extends JFrame {
         panel.add(new JScrollPane(tablaCitas), BorderLayout.CENTER);
         panel.add(panelBotones, BorderLayout.SOUTH);
         return panel;
+    }
+
+    // Mini ventana (JDialog) que muestra las recetas guardadas de un paciente
+    private void mostrarRecetasPaciente(Paciente paciente) {
+        if (paciente == null) {
+            JOptionPane.showMessageDialog(this, "Selecciona un paciente primero.",
+                    "Sin paciente", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        JDialog dialogo = new JDialog(this,
+                "Recetas de " + paciente.getNombres() + " " + paciente.getApellidos(), true);
+        dialogo.setSize(600, 350);
+        dialogo.setLocationRelativeTo(this);
+
+        DefaultTableModel modelo = new DefaultTableModel(
+                new Object[]{"Receta", "Fecha", "Diagnostico atencion", "Medicamentos", "Indicaciones"}, 0);
+
+        for (Atencion atencion : paciente.getHistoriaClinica().getAtenciones()) {
+            for (RecetaMedica receta : atencion.getRecetas()) {
+                modelo.addRow(new Object[]{receta.getIdReceta(), receta.getFecha(), atencion.getDiagnostico(),
+                        String.join(", ", receta.getMedicamentos()), receta.getIndicaciones()});
+            }
+        }
+
+        JTable tabla = new JTable(modelo);
+        tabla.setRowHeight(24);
+        dialogo.add(new JScrollPane(tabla));
+
+        if (modelo.getRowCount() == 0) {
+            dialogo.add(new JLabel("  Este paciente todavia no tiene recetas guardadas.", SwingConstants.CENTER),
+                    BorderLayout.NORTH);
+        }
+
+        dialogo.setVisible(true);
     }
 
     private void actualizarEstadoCitaSeleccionada(boolean atendida) {
