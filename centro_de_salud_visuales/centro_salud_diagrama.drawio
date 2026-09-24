@@ -1,0 +1,160 @@
+<mxfile host="Electron" agent="Claude">
+  <diagram name="Diagrama de Clases - Centro de Salud" id="diagramaCentroSalud">
+    <mxGraphModel dx="2820" dy="1391" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="persona" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=middle;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=0;resizeParentMax=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;fontStyle=3" value="Persona (abstract)" vertex="1">
+          <mxGeometry height="150" width="220" x="460" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="persona_attrs" parent="persona" style="text;align=left;verticalAlign=top;spacingLeft=6;spacingTop=4;spacingBottom=4;whiteSpace=wrap;html=1;overflow=hidden;" value="- idPersona: String&#xa;- dni: String&#xa;- nombres: String&#xa;- apellidos: String" vertex="1">
+          <mxGeometry height="72" width="220" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="persona_div" parent="persona" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rounded=0;" value="" vertex="1">
+          <mxGeometry height="8" width="220" y="102" as="geometry" />
+        </mxCell>
+        <mxCell id="persona_methods" parent="persona" style="text;align=left;verticalAlign=top;spacingLeft=6;spacingTop=4;spacingBottom=4;whiteSpace=wrap;html=1;overflow=hidden;" value="+ getters/setters&#xa;+ toString(): String" vertex="1">
+          <mxGeometry height="40" width="220" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="paciente" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=middle;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=0;resizeParentMax=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Paciente" vertex="1">
+          <mxGeometry height="150" width="220" x="180" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="paciente_attrs" parent="paciente" style="text;align=left;verticalAlign=top;spacingLeft=6;spacingTop=4;spacingBottom=4;whiteSpace=wrap;html=1;overflow=hidden;" value="- fechaNacimiento: String&#xa;- sexo: String&#xa;- historiaClinica: HistoriaClinica&#xa;- citas: List&lt;Cita&gt;" vertex="1">
+          <mxGeometry height="72" width="220" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="paciente_div" parent="paciente" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rounded=0;" value="" vertex="1">
+          <mxGeometry height="8" width="220" y="102" as="geometry" />
+        </mxCell>
+        <mxCell id="paciente_methods" parent="paciente" style="text;align=left;verticalAlign=top;spacingLeft=6;spacingTop=4;spacingBottom=4;whiteSpace=wrap;html=1;overflow=hidden;" value="+ agregarCita(c: Cita): void&#xa;+ getters/setters" vertex="1">
+          <mxGeometry height="40" width="220" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="profesional" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=middle;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=0;resizeParentMax=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Profesional" vertex="1">
+          <mxGeometry height="134" width="220" x="740" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="profesional_attrs" parent="profesional" style="text;align=left;verticalAlign=top;spacingLeft=6;spacingTop=4;spacingBottom=4;whiteSpace=wrap;html=1;overflow=hidden;" value="- especialidad: String&#xa;- cargo: String&#xa;- agenda: List&lt;Cita&gt;" vertex="1">
+          <mxGeometry height="56" width="220" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="profesional_div" parent="profesional" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rounded=0;" value="" vertex="1">
+          <mxGeometry height="8" width="220" y="86" as="geometry" />
+        </mxCell>
+        <mxCell id="profesional_methods" parent="profesional" style="text;align=left;verticalAlign=top;spacingLeft=6;spacingTop=4;spacingBottom=4;whiteSpace=wrap;html=1;overflow=hidden;" value="+ agregarCita(c: Cita): void&#xa;+ getters/setters" vertex="1">
+          <mxGeometry height="40" width="220" y="94" as="geometry" />
+        </mxCell>
+        <mxCell id="historia" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=middle;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=0;resizeParentMax=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="HistoriaClinica" vertex="1">
+          <mxGeometry height="182" width="240" x="140" y="480" as="geometry" />
+        </mxCell>
+        <mxCell id="historia_attrs" parent="historia" style="text;align=left;verticalAlign=top;spacingLeft=6;spacingTop=4;spacingBottom=4;whiteSpace=wrap;html=1;overflow=hidden;" value="- idHistoria: String&#xa;- fechaApertura: String&#xa;- antecedentes: String&#xa;- alergias: String&#xa;- paciente: Paciente&#xa;- atenciones: List&lt;Atencion&gt;" vertex="1">
+          <mxGeometry height="104" width="240" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="historia_div" parent="historia" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rounded=0;" value="" vertex="1">
+          <mxGeometry height="8" width="240" y="134" as="geometry" />
+        </mxCell>
+        <mxCell id="historia_methods" parent="historia" style="text;align=left;verticalAlign=top;spacingLeft=6;spacingTop=4;spacingBottom=4;whiteSpace=wrap;html=1;overflow=hidden;" value="+ agregarAtencion(a: Atencion): void&#xa;+ getters" vertex="1">
+          <mxGeometry height="40" width="240" y="142" as="geometry" />
+        </mxCell>
+        <mxCell id="cita" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=middle;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=0;resizeParentMax=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" value="Cita" vertex="1">
+          <mxGeometry height="214" width="220" x="780" y="480" as="geometry" />
+        </mxCell>
+        <mxCell id="cita_attrs" parent="cita" style="text;align=left;verticalAlign=top;spacingLeft=6;spacingTop=4;spacingBottom=4;whiteSpace=wrap;html=1;overflow=hidden;" value="- idCita: String&#xa;- fecha: String&#xa;- hora: String&#xa;- estado: String&#xa;- paciente: Paciente&#xa;- profesional: Profesional" vertex="1">
+          <mxGeometry height="104" width="220" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="cita_div" parent="cita" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rounded=0;" value="" vertex="1">
+          <mxGeometry height="8" width="220" y="134" as="geometry" />
+        </mxCell>
+        <mxCell id="cita_methods" parent="cita" style="text;align=left;verticalAlign=top;spacingLeft=6;spacingTop=4;spacingBottom=4;whiteSpace=wrap;html=1;overflow=hidden;" value="+ confirmarAtendida(): void&#xa;+ cancelar(): void&#xa;+ getters&#xa;+ toString(): String" vertex="1">
+          <mxGeometry height="72" width="220" y="142" as="geometry" />
+        </mxCell>
+        <mxCell id="atencion" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=middle;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=0;resizeParentMax=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="Atencion" vertex="1">
+          <mxGeometry height="214" width="240" x="440" y="740" as="geometry" />
+        </mxCell>
+        <mxCell id="atencion_attrs" parent="atencion" style="text;align=left;verticalAlign=top;spacingLeft=6;spacingTop=4;spacingBottom=4;whiteSpace=wrap;html=1;overflow=hidden;" value="- fecha: String&#xa;- motivo: String&#xa;- diagnostico: String&#xa;- tratamiento: String&#xa;- profesional: Profesional&#xa;- historiaClinica: HistoriaClinica&#xa;- fua: FUA&#xa;- recetas: List&lt;RecetaMedica&gt;" vertex="1">
+          <mxGeometry height="136" width="240" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="atencion_div" parent="atencion" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rounded=0;" value="" vertex="1">
+          <mxGeometry height="8" width="240" y="166" as="geometry" />
+        </mxCell>
+        <mxCell id="atencion_methods" parent="atencion" style="text;align=left;verticalAlign=top;spacingLeft=6;spacingTop=4;spacingBottom=4;whiteSpace=wrap;html=1;overflow=hidden;" value="+ agregarReceta(r: RecetaMedica): void&#xa;+ getters/setters" vertex="1">
+          <mxGeometry height="40" width="240" y="174" as="geometry" />
+        </mxCell>
+        <mxCell id="fua" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=middle;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=0;resizeParentMax=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" value="FUA" vertex="1">
+          <mxGeometry height="166" width="220" x="200" y="1030" as="geometry" />
+        </mxCell>
+        <mxCell id="fua_attrs" parent="fua" style="text;align=left;verticalAlign=top;spacingLeft=6;spacingTop=4;spacingBottom=4;whiteSpace=wrap;html=1;overflow=hidden;" value="- idFUA: String&#xa;- fecha: String&#xa;- servicio: String&#xa;- diagnostico: String&#xa;- procedimiento: String&#xa;- atencion: Atencion" vertex="1">
+          <mxGeometry height="104" width="220" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="fua_div" parent="fua" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rounded=0;" value="" vertex="1">
+          <mxGeometry height="8" width="220" y="134" as="geometry" />
+        </mxCell>
+        <mxCell id="fua_methods" parent="fua" style="text;align=left;verticalAlign=top;spacingLeft=6;spacingTop=4;spacingBottom=4;whiteSpace=wrap;html=1;overflow=hidden;" value="+ getters" vertex="1">
+          <mxGeometry height="24" width="220" y="142" as="geometry" />
+        </mxCell>
+        <mxCell id="receta" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=middle;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=0;resizeParentMax=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" value="RecetaMedica" vertex="1">
+          <mxGeometry height="182" width="220" x="640" y="1030" as="geometry" />
+        </mxCell>
+        <mxCell id="receta_attrs" parent="receta" style="text;align=left;verticalAlign=top;spacingLeft=6;spacingTop=4;spacingBottom=4;whiteSpace=wrap;html=1;overflow=hidden;" value="- idReceta: String&#xa;- fecha: String&#xa;- medicamentos: List&lt;String&gt;&#xa;- indicaciones: String&#xa;- atencion: Atencion" vertex="1">
+          <mxGeometry height="88" width="220" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="receta_div" parent="receta" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rounded=0;" value="" vertex="1">
+          <mxGeometry height="8" width="220" y="118" as="geometry" />
+        </mxCell>
+        <mxCell id="receta_methods" parent="receta" style="text;align=left;verticalAlign=top;spacingLeft=6;spacingTop=4;spacingBottom=4;whiteSpace=wrap;html=1;overflow=hidden;" value="+ agregarMedicamento(m: String): void&#xa;+ getters&#xa;+ toString(): String" vertex="1">
+          <mxGeometry height="56" width="220" y="126" as="geometry" />
+        </mxCell>
+        <mxCell id="ejecucion" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=middle;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=0;resizeParentMax=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" value="Ejecucion" vertex="1">
+          <mxGeometry height="62" width="200" x="1040" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ejecucion_methods" parent="ejecucion" style="text;align=left;verticalAlign=top;spacingLeft=6;spacingTop=4;spacingBottom=4;whiteSpace=wrap;html=1;overflow=hidden;" value="+ main(args: String[]): void" vertex="1">
+          <mxGeometry height="32" width="200" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="e_paciente_persona" edge="1" parent="1" source="paciente" style="endArrow=block;endFill=0;endSize=16;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.3;entryY=1;entryDx=0;entryDy=0;" target="persona">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_profesional_persona" edge="1" parent="1" source="profesional" style="endArrow=block;endFill=0;endSize=16;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.7;entryY=1;entryDx=0;entryDy=0;" target="persona">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_paciente_historia" edge="1" parent="1" source="paciente" style="startArrow=diamondThin;startFill=1;startSize=16;endArrow=none;html=1;rounded=0;fontSize=10;" target="historia" value="1                    1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_historia_atencion" edge="1" parent="1" source="historia" style="startArrow=diamondThin;startFill=1;startSize=16;endArrow=none;html=1;rounded=0;fontSize=10;" target="atencion" value="1                    0..*">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_atencion_receta" edge="1" parent="1" source="atencion" style="startArrow=diamondThin;startFill=1;startSize=16;endArrow=none;html=1;rounded=0;fontSize=10;" target="receta" value="1                    0..*">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_atencion_fua" edge="1" parent="1" source="atencion" style="startArrow=diamondThin;startFill=1;startSize=16;endArrow=none;html=1;rounded=0;fontSize=10;" target="fua" value="1                    0..1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_atencion_profesional" edge="1" parent="1" source="atencion" style="startArrow=diamondThin;startFill=0;startSize=16;endArrow=none;html=1;rounded=0;fontSize=10;" target="profesional" value="0..*                    1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_paciente_cita" edge="1" parent="1" source="paciente" style="startArrow=diamondThin;startFill=0;startSize=16;endArrow=none;html=1;rounded=0;fontSize=10;" target="cita" value="1                    0..*">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_profesional_cita" edge="1" parent="1" source="profesional" style="startArrow=diamondThin;startFill=0;startSize=16;endArrow=none;html=1;rounded=0;fontSize=10;" target="cita" value="1                    0..*">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d_eje_paciente" edge="1" parent="1" source="ejecucion" style="dashed=1;endArrow=open;endFill=0;html=1;strokeColor=#999999;rounded=0;" target="paciente">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d_eje_profesional" edge="1" parent="1" source="ejecucion" style="dashed=1;endArrow=open;endFill=0;html=1;strokeColor=#999999;rounded=0;" target="profesional">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d_eje_historia" edge="1" parent="1" source="ejecucion" style="dashed=1;endArrow=open;endFill=0;html=1;strokeColor=#999999;rounded=0;" target="historia">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d_eje_atencion" edge="1" parent="1" source="ejecucion" style="dashed=1;endArrow=open;endFill=0;html=1;strokeColor=#999999;rounded=0;" target="atencion">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d_eje_fua" edge="1" parent="1" source="ejecucion" style="dashed=1;endArrow=open;endFill=0;html=1;strokeColor=#999999;rounded=0;" target="fua">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d_eje_receta" edge="1" parent="1" source="ejecucion" style="dashed=1;endArrow=open;endFill=0;html=1;strokeColor=#999999;rounded=0;" target="receta">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d_eje_cita" edge="1" parent="1" source="ejecucion" style="dashed=1;endArrow=open;endFill=0;html=1;strokeColor=#999999;rounded=0;" target="cita">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
