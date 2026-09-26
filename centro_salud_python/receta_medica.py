@@ -1,42 +1,30 @@
-"""Receta médica generada a partir de una atención."""
-from __future__ import annotations
-
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from atencion import Atencion
-
-
 class RecetaMedica:
-    def __init__(self, id_receta: str, fecha: str, indicaciones: str, atencion: Atencion):
+    """Receta medica que se genera a partir de una atencion."""
+
+    def __init__(self, id_receta, fecha, indicaciones, atencion):
         self._id_receta = id_receta
         self._fecha = fecha
-        self._medicamentos: list[str] = []
+        self._medicamentos = []
         self._indicaciones = indicaciones
-        self._atencion = atencion  # atención que origina la receta
+        self._atencion = atencion  # atencion que origina la receta
 
-    def agregar_medicamento(self, medicamento: str) -> None:
+    def agregar_medicamento(self, medicamento):
         self._medicamentos.append(medicamento)
 
-    @property
-    def id_receta(self) -> str:
+    def get_id_receta(self):
         return self._id_receta
 
-    @property
-    def fecha(self) -> str:
+    def get_fecha(self):
         return self._fecha
 
-    @property
-    def medicamentos(self) -> list[str]:
-        return list(self._medicamentos)
+    def get_medicamentos(self):
+        return self._medicamentos
 
-    @property
-    def indicaciones(self) -> str:
+    def get_indicaciones(self):
         return self._indicaciones
 
-    @property
-    def atencion(self) -> Atencion:
+    def get_atencion(self):
         return self._atencion
 
-    def __str__(self) -> str:
+    def __str__(self):
         return f"Receta {self._id_receta} ({self._fecha}) - {len(self._medicamentos)} medicamento(s)"

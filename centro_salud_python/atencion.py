@@ -1,65 +1,42 @@
-"""Atención médica registrada en una historia clínica."""
-from __future__ import annotations
-
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from fua import FUA
-    from historia_clinica import HistoriaClinica
-    from profesional import Profesional
-    from receta_medica import RecetaMedica
-
-
 class Atencion:
-    def __init__(self, fecha: str, motivo: str, diagnostico: str, tratamiento: str,
-                 profesional: Profesional, historia_clinica: HistoriaClinica):
+    """Una atencion medica: motivo, diagnostico, tratamiento y quien la registro."""
+
+    def __init__(self, fecha, motivo, diagnostico, tratamiento, profesional, historia_clinica):
         self._fecha = fecha
         self._motivo = motivo
         self._diagnostico = diagnostico
         self._tratamiento = tratamiento
-        self._profesional = profesional  # quien atiende
-        self._historia_clinica = historia_clinica  # a qué historia pertenece
-        self._fua: FUA | None = None  # documento generado
-        self._recetas: list[RecetaMedica] = []  # 1 atención -> N recetas
+        self._profesional = profesional            # quien atiende
+        self._historia_clinica = historia_clinica  # a que historia pertenece
+        self._fua = None                            # documento generado
+        self._recetas = []                          # 1 atencion -> N recetas
 
-    def agregar_receta(self, receta: RecetaMedica) -> None:
+    def agregar_receta(self, receta):
         self._recetas.append(receta)
 
-    @property
-    def fecha(self) -> str:
+    def get_fecha(self):
         return self._fecha
 
-    @property
-    def motivo(self) -> str:
+    def get_motivo(self):
         return self._motivo
 
-    @property
-    def diagnostico(self) -> str:
+    def get_diagnostico(self):
         return self._diagnostico
 
-    @property
-    def tratamiento(self) -> str:
+    def get_tratamiento(self):
         return self._tratamiento
 
-    @property
-    def profesional(self) -> Profesional:
+    def get_profesional(self):
         return self._profesional
 
-    @property
-    def historia_clinica(self) -> HistoriaClinica:
+    def get_historia_clinica(self):
         return self._historia_clinica
 
-    @property
-    def fua(self) -> FUA | None:
+    def get_fua(self):
         return self._fua
 
-    @fua.setter
-    def fua(self, valor: FUA) -> None:
-        self._fua = valor
+    def set_fua(self, fua):
+        self._fua = fua
 
-    @property
-    def recetas(self) -> list[RecetaMedica]:
-        return list(self._recetas)
-
-    def __str__(self) -> str:
-        return f"{self._fecha} - {self._diagnostico} ({self._profesional.nombres})"
+    def get_recetas(self):
+        return self._recetas

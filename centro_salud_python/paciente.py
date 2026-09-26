@@ -1,51 +1,36 @@
-"""Paciente del centro de salud."""
-from __future__ import annotations
-
-from typing import TYPE_CHECKING
-
 from persona import Persona
-
-if TYPE_CHECKING:  # solo para los tipos; evita imports circulares
-    from cita import Cita
-    from historia_clinica import HistoriaClinica
 
 
 class Paciente(Persona):
-    def __init__(self, id_persona: str, dni: str, nombres: str, apellidos: str,
-                 fecha_nacimiento: str, sexo: str):
+    """Un paciente del centro de salud. Hereda datos generales de Persona."""
+
+    def __init__(self, id_persona, dni, nombres, apellidos, fecha_nacimiento, sexo):
         super().__init__(id_persona, dni, nombres, apellidos)
         self._fecha_nacimiento = fecha_nacimiento
         self._sexo = sexo
-        self._historia_clinica: HistoriaClinica | None = None  # 1 paciente -> 1 historia clínica
-        self._citas: list[Cita] = []  # 1 paciente -> N citas
+        self._historia_clinica = None  # 1 paciente -> 1 historia clinica
+        self._citas = []               # 1 paciente -> N citas
 
-    def agregar_cita(self, cita: Cita) -> None:
+    def agregar_cita(self, cita):
         self._citas.append(cita)
 
-    @property
-    def citas(self) -> list[Cita]:
-        return list(self._citas)  # copia: la lista interna no se expone
+    def get_citas(self):
+        return self._citas
 
-    @property
-    def fecha_nacimiento(self) -> str:
+    def get_fecha_nacimiento(self):
         return self._fecha_nacimiento
 
-    @fecha_nacimiento.setter
-    def fecha_nacimiento(self, valor: str) -> None:
-        self._fecha_nacimiento = valor
+    def set_fecha_nacimiento(self, fecha_nacimiento):
+        self._fecha_nacimiento = fecha_nacimiento
 
-    @property
-    def sexo(self) -> str:
+    def get_sexo(self):
         return self._sexo
 
-    @sexo.setter
-    def sexo(self, valor: str) -> None:
-        self._sexo = valor
+    def set_sexo(self, sexo):
+        self._sexo = sexo
 
-    @property
-    def historia_clinica(self) -> HistoriaClinica | None:
+    def get_historia_clinica(self):
         return self._historia_clinica
 
-    @historia_clinica.setter
-    def historia_clinica(self, valor: HistoriaClinica) -> None:
-        self._historia_clinica = valor
+    def set_historia_clinica(self, historia_clinica):
+        self._historia_clinica = historia_clinica

@@ -1,41 +1,29 @@
-"""Profesional de salud que atiende en el centro."""
-from __future__ import annotations
-
-from typing import TYPE_CHECKING
-
 from persona import Persona
-
-if TYPE_CHECKING:
-    from cita import Cita
 
 
 class Profesional(Persona):
-    def __init__(self, id_persona: str, dni: str, nombres: str, apellidos: str,
-                 especialidad: str, cargo: str):
+    """Un profesional de salud (medico, enfermero, etc)."""
+
+    def __init__(self, id_persona, dni, nombres, apellidos, especialidad, cargo):
         super().__init__(id_persona, dni, nombres, apellidos)
         self._especialidad = especialidad
         self._cargo = cargo
-        self._agenda: list[Cita] = []  # 1 profesional -> N citas
+        self._agenda = []  # 1 profesional -> N citas
 
-    def agregar_cita(self, cita: Cita) -> None:
+    def agregar_cita(self, cita):
         self._agenda.append(cita)
 
-    @property
-    def agenda(self) -> list[Cita]:
-        return list(self._agenda)
+    def get_agenda(self):
+        return self._agenda
 
-    @property
-    def especialidad(self) -> str:
+    def get_especialidad(self):
         return self._especialidad
 
-    @especialidad.setter
-    def especialidad(self, valor: str) -> None:
-        self._especialidad = valor
+    def set_especialidad(self, especialidad):
+        self._especialidad = especialidad
 
-    @property
-    def cargo(self) -> str:
+    def get_cargo(self):
         return self._cargo
 
-    @cargo.setter
-    def cargo(self, valor: str) -> None:
-        self._cargo = valor
+    def set_cargo(self, cargo):
+        self._cargo = cargo

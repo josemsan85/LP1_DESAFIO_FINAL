@@ -1,58 +1,39 @@
-"""Cita médica entre un paciente y un profesional."""
-from __future__ import annotations
-
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from paciente import Paciente
-    from profesional import Profesional
-
-
 class Cita:
-    # Estados posibles de una cita
-    PENDIENTE = "PENDIENTE"
-    ATENDIDA = "ATENDIDA"
-    CANCELADA = "CANCELADA"
+    """Una cita agendada entre un paciente y un profesional."""
 
-    def __init__(self, id_cita: str, fecha: str, hora: str,
-                 paciente: Paciente, profesional: Profesional):
+    def __init__(self, id_cita, fecha, hora, paciente, profesional):
         self._id_cita = id_cita
         self._fecha = fecha
         self._hora = hora
         self._paciente = paciente
         self._profesional = profesional
-        self._estado = Cita.PENDIENTE
+        self._estado = "PENDIENTE"  # PENDIENTE, ATENDIDA, CANCELADA
 
-    def confirmar_atendida(self) -> None:
-        self._estado = Cita.ATENDIDA
+    def confirmar_atendida(self):
+        self._estado = "ATENDIDA"
 
-    def cancelar(self) -> None:
-        self._estado = Cita.CANCELADA
+    def cancelar(self):
+        self._estado = "CANCELADA"
 
-    @property
-    def id_cita(self) -> str:
+    def get_id_cita(self):
         return self._id_cita
 
-    @property
-    def fecha(self) -> str:
+    def get_fecha(self):
         return self._fecha
 
-    @property
-    def hora(self) -> str:
+    def get_hora(self):
         return self._hora
 
-    @property
-    def estado(self) -> str:
+    def get_estado(self):
         return self._estado
 
-    @property
-    def paciente(self) -> Paciente:
+    def get_paciente(self):
         return self._paciente
 
-    @property
-    def profesional(self) -> Profesional:
+    def get_profesional(self):
         return self._profesional
 
-    def __str__(self) -> str:
-        return (f"Cita {self._id_cita} - {self._paciente.nombres} con {self._profesional.nombres} "
-                f"({self._fecha} {self._hora}) [{self._estado}]")
+    def __str__(self):
+        return (f"Cita {self._id_cita} - {self._paciente.get_nombres()} con "
+                f"{self._profesional.get_nombres()} ({self._fecha} {self._hora}) "
+                f"[{self._estado}]")

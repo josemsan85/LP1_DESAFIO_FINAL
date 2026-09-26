@@ -1,50 +1,35 @@
-"""Clase base abstracta de las personas del centro de salud."""
-from abc import ABC
+class Persona:
+    """Clase base para las personas del sistema (pacientes y profesionales)."""
 
-
-class Persona(ABC):
-    """Datos comunes de pacientes y profesionales. No se instancia directamente."""
-
-    def __init__(self, id_persona: str, dni: str, nombres: str, apellidos: str):
-        # En Java la clase es abstract; aquí se impide instanciarla de forma directa.
-        if type(self) is Persona:
-            raise TypeError("Persona es abstracta: usa Paciente o Profesional.")
+    def __init__(self, id_persona, dni, nombres, apellidos):
         self._id_persona = id_persona
         self._dni = dni
         self._nombres = nombres
         self._apellidos = apellidos
 
-    @property
-    def id_persona(self) -> str:
+    def get_id_persona(self):
         return self._id_persona
 
-    @id_persona.setter
-    def id_persona(self, valor: str) -> None:
-        self._id_persona = valor
+    def set_id_persona(self, id_persona):
+        self._id_persona = id_persona
 
-    @property
-    def dni(self) -> str:
+    def get_dni(self):
         return self._dni
 
-    @dni.setter
-    def dni(self, valor: str) -> None:
-        self._dni = valor
+    def set_dni(self, dni):
+        self._dni = dni
 
-    @property
-    def nombres(self) -> str:
+    def get_nombres(self):
         return self._nombres
 
-    @nombres.setter
-    def nombres(self, valor: str) -> None:
-        self._nombres = valor
+    def set_nombres(self, nombres):
+        self._nombres = nombres
 
-    @property
-    def apellidos(self) -> str:
+    def get_apellidos(self):
         return self._apellidos
 
-    @apellidos.setter
-    def apellidos(self, valor: str) -> None:
-        self._apellidos = valor
+    def set_apellidos(self, apellidos):
+        self._apellidos = apellidos
 
-    def __str__(self) -> str:
+    def __str__(self):
         return f"{self._nombres} {self._apellidos} (DNI: {self._dni})"

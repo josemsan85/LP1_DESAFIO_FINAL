@@ -1,80 +1,105 @@
-"""Repositorio único (patrón Singleton) con todos los datos del centro de salud."""
-from __future__ import annotations
+from datetime import date, timedelta
 
-from datetime import date
-
-from atencion import Atencion
-from cita import Cita
-from historia_clinica import HistoriaClinica
 from paciente import Paciente
 from profesional import Profesional
+from historia_clinica import HistoriaClinica
+from atencion import Atencion
 from receta_medica import RecetaMedica
+from cita import Cita
+from fua import FUA
 
 
 class RepositorioCentroSalud:
-    _instancia: RepositorioCentroSalud | None = None
+    """
+    Repositorio central (patron Singleton) que guarda en memoria
+    los pacientes, profesionales, atenciones y citas registrados.
+    Solo puede existir una instancia en todo el programa.
+    """
+
+    _instancia = None
 
     def __init__(self):
-        # Usa siempre RepositorioCentroSalud.get_instancia() en lugar de crearlo directamente.
-        self._pacientes: list[Paciente] = []
-        self._profesionales: list[Profesional] = []
-        self._atenciones: list[Atencion] = []
-        self._citas: list[Cita] = []
+        self._pacientes = []
+        self._profesionales = []
+        self._atenciones = []
+        self._citas = []
+        self._fuas = []
 
         self._contador_paciente = 1
         self._contador_profesional = 1
         self._contador_historia = 1
         self._contador_cita = 1
         self._contador_receta = 1
+        self._contador_fua = 1
 
-    @classmethod
-    def get_instancia(cls) -> RepositorioCentroSalud:
-        if cls._instancia is None:
-            cls._instancia = cls()
-        return cls._instancia
+        self._cargar_datos_de_prueba()
 
-    def crear_paciente(self, dni: str, nombres: str, apellidos: str,
-                       fecha_nacimiento: str, sexo: str) -> Paciente:
+    @staticmethod
+    def get_instancia():
+        if RepositorioCentroSalud._instancia is None:
+            RepositorioCentroSalud._instancia = RepositorioCentroSalud()
+        return RepositorioCentroSalud._instancia
+
+    # Datos pre-ingresados para que el sistema no arranque vacio
+    def _cargar_datos_de_prueba(self):
+        luis = self.crear_paciente("87654321", "Luis", "Ramos Vega", "1990-05-10", "M")
+        rosa = self.crear_paciente("71234567", "Rosa", "Chilon Diaz", "1985-02-20", "F")
+
+        ana = self.crear_profesional("27654321", "Ana", "Torres Quispe", "Medicina General", "Medico")
+        carlos = self.crear_profesional("29876543", "Carlos", "Mendoza Silva", "Enfermeria", "Enfermero")
+
+        atencion1 = self.crear_atencion(
+            luis, ana, str(date.today() - timedelta(days=3)),
+            "Dolor de cabeza intenso", "Migraña", "Reposo y analgesico")
+        self.crear_receta(
+            atencion1, "Tomar con alimentos, reposo 24h",
+            ["Paracetamol 500mg - cada 8h por 3 dias"])
+        self.crear_fua(atencion1, "Medicina General", "Consulta ambulatoria")
+
+        self.crear_atencion(
+            rosa, carlos, str(date.today() - timedelta(days=1)),
+            "Control de presion arterial", "Hipertension leve", "Dieta baja en sodio")
+
+        self.crear_cita(luis, ana, str(date.today() + timedelta(days=7)), "10:00")
+        self.crear_cita(rosa, carlos, str(date.today() + timedelta(days=10)), "09:30")
+
+    def crear_paciente(self, dni, nombres, apellidos, fecha_nacimiento, sexo):
         id_paciente = f"PA{self._contador_paciente:03d}"
         self._contador_paciente += 1
         paciente = Paciente(id_paciente, dni, nombres, apellidos, fecha_nacimiento, sexo)
 
-        historia = HistoriaClinica(f"H{self._contador_historia:03d}",
-                                   date.today().isoformat(), "Ninguno", "Ninguna", paciente)
+        historia = HistoriaClinica(
+            f"H{self._contador_historia:03d}", str(date.today()), "Ninguno", "Ninguna", paciente)
         self._contador_historia += 1
-        paciente.historia_clinica = historia
+        paciente.set_historia_clinica(historia)
 
         self._pacientes.append(paciente)
         return paciente
 
-    def crear_profesional(self, dni: str, nombres: str, apellidos: str,
-                          especialidad: str, cargo: str) -> Profesional:
+    def crear_profesional(self, dni, nombres, apellidos, especialidad, cargo):
         id_profesional = f"PR{self._contador_profesional:03d}"
         self._contador_profesional += 1
         profesional = Profesional(id_profesional, dni, nombres, apellidos, especialidad, cargo)
         self._profesionales.append(profesional)
         return profesional
 
-    def crear_atencion(self, paciente: Paciente, profesional: Profesional, fecha: str,
-                       motivo: str, diagnostico: str, tratamiento: str) -> Atencion:
-        historia = paciente.historia_clinica
+    def crear_atencion(self, paciente, profesional, fecha, motivo, diagnostico, tratamiento):
+        historia = paciente.get_historia_clinica()
         atencion = Atencion(fecha, motivo, diagnostico, tratamiento, profesional, historia)
         historia.agregar_atencion(atencion)
         self._atenciones.append(atencion)
         return atencion
 
-    def crear_receta(self, atencion: Atencion, indicaciones: str,
-                     medicamentos: list[str]) -> RecetaMedica:
+    def crear_receta(self, atencion, indicaciones, medicamentos):
         id_receta = f"REC{self._contador_receta:03d}"
         self._contador_receta += 1
-        receta = RecetaMedica(id_receta, date.today().isoformat(), indicaciones, atencion)
+        receta = RecetaMedica(id_receta, str(date.today()), indicaciones, atencion)
         for medicamento in medicamentos:
             receta.agregar_medicamento(medicamento)
         atencion.agregar_receta(receta)
         return receta
 
-    def crear_cita(self, paciente: Paciente, profesional: Profesional,
-                   fecha: str, hora: str) -> Cita:
+    def crear_cita(self, paciente, profesional, fecha, hora):
         id_cita = f"CITA{self._contador_cita:03d}"
         self._contador_cita += 1
         cita = Cita(id_cita, fecha, hora, paciente, profesional)
@@ -83,18 +108,26 @@ class RepositorioCentroSalud:
         self._citas.append(cita)
         return cita
 
-    @property
-    def pacientes(self) -> list[Paciente]:
-        return list(self._pacientes)
+    def crear_fua(self, atencion, servicio, procedimiento):
+        id_fua = f"FUA{self._contador_fua:03d}"
+        self._contador_fua += 1
+        fua = FUA(id_fua, atencion.get_fecha(), servicio, atencion.get_diagnostico(),
+                  procedimiento, atencion)
+        atencion.set_fua(fua)
+        self._fuas.append(fua)
+        return fua
 
-    @property
-    def profesionales(self) -> list[Profesional]:
-        return list(self._profesionales)
+    def get_pacientes(self):
+        return self._pacientes
 
-    @property
-    def atenciones(self) -> list[Atencion]:
-        return list(self._atenciones)
+    def get_profesionales(self):
+        return self._profesionales
 
-    @property
-    def citas(self) -> list[Cita]:
-        return list(self._citas)
+    def get_atenciones(self):
+        return self._atenciones
+
+    def get_citas(self):
+        return self._citas
+
+    def get_fuas(self):
+        return self._fuas
