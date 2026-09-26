@@ -21,6 +21,7 @@ public class VentanaPrincipal extends JFrame {
     private DefaultTableModel modeloProfesionales;
     private DefaultTableModel modeloAtenciones;
     private DefaultTableModel modeloCitas;
+    private DefaultTableModel modeloFua;
 
     // Combos que dependen de los pacientes/profesionales registrados
     private JComboBox<Paciente> comboPacienteAtencion;
@@ -28,6 +29,7 @@ public class VentanaPrincipal extends JFrame {
     private JComboBox<Paciente> comboPacienteCita;
     private JComboBox<Profesional> comboProfesionalCita;
     private JComboBox<Atencion> comboAtencionReceta;
+    private JComboBox<Atencion> comboAtencionFua;
 
     private JTable tablaCitas;
     private DefaultListModel<String> modeloMedicamentos = new DefaultListModel<>();
@@ -42,6 +44,7 @@ public class VentanaPrincipal extends JFrame {
         pestanas.addTab("Pacientes", crearPanelPacientes());
         pestanas.addTab("Profesionales", crearPanelProfesionales());
         pestanas.addTab("Atenciones y Recetas", crearPanelAtenciones());
+        pestanas.addTab("FUA", crearPanelFua());
         pestanas.addTab("Citas", crearPanelCitas());
 
         add(pestanas);
@@ -78,6 +81,11 @@ public class VentanaPrincipal extends JFrame {
         modeloPacientes = new DefaultTableModel(
                 new Object[]{"ID", "DNI", "Nombres", "Apellidos", "F. Nacimiento", "Sexo"}, 0);
         JTable tabla = new JTable(modeloPacientes);
+
+        for (Paciente p : repo.getPacientes()) {
+            modeloPacientes.addRow(new Object[]{p.getIdPersona(), p.getDni(), p.getNombres(),
+                    p.getApellidos(), p.getFechaNacimiento(), p.getSexo()});
+        }
 
         // Evento: click en "Registrar paciente"
         btnRegistrar.addActionListener(e -> {
@@ -149,6 +157,11 @@ public class VentanaPrincipal extends JFrame {
                 new Object[]{"ID", "DNI", "Nombres", "Apellidos", "Especialidad", "Cargo"}, 0);
         JTable tabla = new JTable(modeloProfesionales);
 
+        for (Profesional p : repo.getProfesionales()) {
+            modeloProfesionales.addRow(new Object[]{p.getIdPersona(), p.getDni(), p.getNombres(),
+                    p.getApellidos(), p.getEspecialidad(), p.getCargo()});
+        }
+
         btnRegistrar.addActionListener(e -> {
             String dni = txtDni.getText().trim();
             String nombres = txtNombres.getText().trim();
@@ -211,9 +224,18 @@ public class VentanaPrincipal extends JFrame {
         formAtencion.add(new JLabel("Tratamiento:"));
         formAtencion.add(txtTratamiento);
 
+        for (Paciente p : repo.getPacientes()) comboPacienteAtencion.addItem(p);
+        for (Profesional p : repo.getProfesionales()) comboProfesionalAtencion.addItem(p);
+
         modeloAtenciones = new DefaultTableModel(
                 new Object[]{"Fecha", "Paciente", "Profesional", "Diagnostico"}, 0);
         JTable tablaAtenciones = new JTable(modeloAtenciones);
+
+        for (Atencion a : repo.getAtenciones()) {
+            Paciente pac = a.getHistoriaClinica().getPaciente();
+            modeloAtenciones.addRow(new Object[]{a.getFecha(), pac.getNombres() + " " + pac.getApellidos(),
+                    a.getProfesional().getNombres() + " " + a.getProfesional().getApellidos(), a.getDiagnostico()});
+        }
 
         btnRegistrarAtencion.addActionListener(e -> {
             Paciente paciente = (Paciente) comboPacienteAtencion.getSelectedItem();
@@ -231,6 +253,7 @@ public class VentanaPrincipal extends JFrame {
             modeloAtenciones.addRow(new Object[]{atencion.getFecha(), paciente.getNombres() + " " + paciente.getApellidos(),
                     profesional.getNombres() + " " + profesional.getApellidos(), atencion.getDiagnostico()});
             comboAtencionReceta.addItem(atencion);
+            comboAtencionFua.addItem(atencion);
 
             txtMotivo.setText("");
             txtDiagnostico.setText("");
@@ -259,6 +282,7 @@ public class VentanaPrincipal extends JFrame {
         comboAtencionReceta.setRenderer((lista, atencion, indice, seleccionado, foco) -> new JLabel(
                 atencion == null ? "" : atencion.getFecha() + " - " + atencion.getDiagnostico()
                         + " (" + atencion.getProfesional().getNombres() + ")"));
+        for (Atencion a : repo.getAtenciones()) comboAtencionReceta.addItem(a);
 
         JTextField txtMedicamento = new JTextField();
         JButton btnAgregarMedicamento = new JButton("+ Medicamento");
@@ -318,6 +342,75 @@ public class VentanaPrincipal extends JFrame {
     }
 
     // ---------------------------------------------------------
+    // TAB: GENERAR FUA
+    // ---------------------------------------------------------
+    private JPanel crearPanelFua() {
+        JPanel panel = new JPanel(new BorderLayout(10, 10));
+
+        JPanel formulario = new JPanel(new GridLayout(4, 2, 5, 5));
+        comboAtencionFua = new JComboBox<>();
+        comboAtencionFua.setRenderer((lista, atencion, indice, seleccionado, foco) -> new JLabel(
+                atencion == null ? "" : atencion.getFecha() + " - " + atencion.getDiagnostico() + " ("
+                        + atencion.getHistoriaClinica().getPaciente().getNombres() + ")"));
+        for (Atencion a : repo.getAtenciones()) comboAtencionFua.addItem(a);
+
+        JTextField txtServicio = new JTextField();
+        JTextField txtProcedimiento = new JTextField();
+        JButton btnGenerarFua = new JButton("Generar FUA");
+
+        formulario.add(new JLabel("Atencion:"));
+        formulario.add(comboAtencionFua);
+        formulario.add(new JLabel("Servicio:"));
+        formulario.add(txtServicio);
+        formulario.add(new JLabel("Procedimiento:"));
+        formulario.add(txtProcedimiento);
+        formulario.add(new JLabel());
+        formulario.add(btnGenerarFua);
+
+        modeloFua = new DefaultTableModel(
+                new Object[]{"ID FUA", "Fecha", "Servicio", "Diagnostico", "Procedimiento", "Paciente"}, 0);
+        JTable tablaFua = new JTable(modeloFua);
+
+        for (FUA fua : repo.getFuas()) {
+            Paciente paciente = fua.getAtencion().getHistoriaClinica().getPaciente();
+            modeloFua.addRow(new Object[]{fua.getIdFUA(), fua.getFecha(), fua.getServicio(),
+                    fua.getDiagnostico(), fua.getProcedimiento(), paciente.getNombres() + " " + paciente.getApellidos()});
+        }
+
+        // Evento: generar el FUA a partir de la atencion seleccionada
+        btnGenerarFua.addActionListener(e -> {
+            Atencion atencion = (Atencion) comboAtencionFua.getSelectedItem();
+            if (atencion == null) {
+                JOptionPane.showMessageDialog(this, "Selecciona una atencion primero.",
+                        "Faltan datos", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            if (atencion.getFua() != null) {
+                JOptionPane.showMessageDialog(this, "Esta atencion ya tiene un FUA generado ("
+                        + atencion.getFua().getIdFUA() + ").", "FUA existente", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            if (txtServicio.getText().trim().isEmpty() || txtProcedimiento.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Completa servicio y procedimiento.",
+                        "Faltan datos", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            FUA fua = repo.crearFua(atencion, txtServicio.getText().trim(), txtProcedimiento.getText().trim());
+            Paciente paciente = atencion.getHistoriaClinica().getPaciente();
+            modeloFua.addRow(new Object[]{fua.getIdFUA(), fua.getFecha(), fua.getServicio(),
+                    fua.getDiagnostico(), fua.getProcedimiento(), paciente.getNombres() + " " + paciente.getApellidos()});
+
+            txtServicio.setText("");
+            txtProcedimiento.setText("");
+        });
+
+        panel.add(formulario, BorderLayout.NORTH);
+        panel.add(new JScrollPane(tablaFua), BorderLayout.CENTER);
+        return panel;
+    }
+
+    // ---------------------------------------------------------
     // TAB 4: CITAS
     // ---------------------------------------------------------
     private JPanel crearPanelCitas() {
@@ -341,9 +434,18 @@ public class VentanaPrincipal extends JFrame {
         formulario.add(new JLabel());
         formulario.add(btnRegistrarCita);
 
+        for (Paciente p : repo.getPacientes()) comboPacienteCita.addItem(p);
+        for (Profesional p : repo.getProfesionales()) comboProfesionalCita.addItem(p);
+
         modeloCitas = new DefaultTableModel(
                 new Object[]{"ID", "Paciente", "Profesional", "Fecha", "Hora", "Estado"}, 0);
         tablaCitas = new JTable(modeloCitas);
+
+        for (Cita c : repo.getCitas()) {
+            modeloCitas.addRow(new Object[]{c.getIdCita(), c.getPaciente().getNombres() + " " + c.getPaciente().getApellidos(),
+                    c.getProfesional().getNombres() + " " + c.getProfesional().getApellidos(),
+                    c.getFecha(), c.getHora(), c.getEstado()});
+        }
 
         JButton btnMarcarAtendida = new JButton("Marcar atendida");
         JButton btnCancelar = new JButton("Cancelar cita");

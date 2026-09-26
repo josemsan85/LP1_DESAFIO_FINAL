@@ -3,6 +3,12 @@ package CENTRO_SALUD;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+/**
+ * Repositorio central (patron Singleton) que guarda en memoria
+ * los pacientes, profesionales, atenciones y citas registrados
+ * desde la interfaz grafica.
+ */
 public class RepositorioCentroSalud {
     private static RepositorioCentroSalud instancia;
 
@@ -10,18 +16,43 @@ public class RepositorioCentroSalud {
     private List<Profesional> profesionales = new ArrayList<>();
     private List<Atencion> atenciones = new ArrayList<>();
     private List<Cita> citas = new ArrayList<>();
+    private List<FUA> fuas = new ArrayList<>();
 
     private int contadorPaciente = 1;
     private int contadorProfesional = 1;
     private int contadorHistoria = 1;
     private int contadorCita = 1;
     private int contadorReceta = 1;
+    private int contadorFua = 1;
 
-    private RepositorioCentroSalud() {}
+    private RepositorioCentroSalud() {
+        cargarDatosDePrueba();
+    }
 
     public static RepositorioCentroSalud getInstancia() {
         if (instancia == null) instancia = new RepositorioCentroSalud();
         return instancia;
+    }
+
+    // Data pre-ingresada en los ArrayList para que el sistema no arranque vacio
+    private void cargarDatosDePrueba() {
+        Paciente luis = crearPaciente("87654321", "Luis", "Ramos Vega", "1990-05-10", "M");
+        Paciente rosa = crearPaciente("71234567", "Rosa", "Chilon Diaz", "1985-02-20", "F");
+
+        Profesional ana = crearProfesional("27654321", "Ana", "Torres Quispe", "Medicina General", "Medico");
+        Profesional carlos = crearProfesional("29876543", "Carlos", "Mendoza Silva", "Enfermeria", "Enfermero");
+
+        Atencion atencion1 = crearAtencion(luis, ana, LocalDate.now().minusDays(3).toString(),
+                "Dolor de cabeza intenso", "Migraña", "Reposo y analgesico");
+        crearReceta(atencion1, "Tomar con alimentos, reposo 24h",
+                List.of("Paracetamol 500mg - cada 8h por 3 dias"));
+        crearFua(atencion1, "Medicina General", "Consulta ambulatoria");
+
+        Atencion atencion2 = crearAtencion(rosa, carlos, LocalDate.now().minusDays(1).toString(),
+                "Control de presion arterial", "Hipertension leve", "Dieta baja en sodio");
+
+        crearCita(luis, ana, LocalDate.now().plusDays(7).toString(), "10:00");
+        crearCita(rosa, carlos, LocalDate.now().plusDays(10).toString(), "09:30");
     }
 
     public Paciente crearPaciente(String dni, String nombres, String apellidos,
@@ -74,8 +105,17 @@ public class RepositorioCentroSalud {
         return cita;
     }
 
+    public FUA crearFua(Atencion atencion, String servicio, String procedimiento) {
+        String id = String.format("FUA%03d", contadorFua++);
+        FUA fua = new FUA(id, atencion.getFecha(), servicio, atencion.getDiagnostico(), procedimiento, atencion);
+        atencion.setFua(fua);
+        fuas.add(fua);
+        return fua;
+    }
+
     public List<Paciente> getPacientes() { return pacientes; }
     public List<Profesional> getProfesionales() { return profesionales; }
     public List<Atencion> getAtenciones() { return atenciones; }
     public List<Cita> getCitas() { return citas; }
+    public List<FUA> getFuas() { return fuas; }
 }
